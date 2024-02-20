@@ -1,7 +1,18 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
-  return <div>AuthLayout</div>;
+  const bgStyle = {
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(/bg2.jpg)`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  };
+
+  return (
+    <div className="flex items-center h-screen justify-center" style={bgStyle}>
+      <Outlet />
+    </div>
+  );
 };
 
 export default AuthLayout;
