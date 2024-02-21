@@ -10,7 +10,7 @@ const MainLayout = () => {
       <main className="w-full max-w-[1170px] px-5 mx-auto">
         <Outlet />
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

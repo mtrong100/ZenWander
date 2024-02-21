@@ -1,14 +1,14 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { navLinks } from "../../../../server/utils/constants";
 import Button from "../Button";
+import { navLinks } from "../../utils/constants";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
   return (
-    <header className="p-5  max-w-[1920px] mx-auto">
+    <header className="p-5  max-w-[1920px] mx-auto sticky top-0 bg-white z-50 shadow-sm">
       <div className="w-full max-w-[1190px] mx-auto flex items-center justify-between">
         <Link to="/" className="font-bold text-3xl">
           <h1 className="font-bold text-4xl text-center">

@@ -1,5 +1,20 @@
 import { BookOpen, Code, Cpu, MapPin, Shirt, Trophy } from "lucide-react";
 
+export const navLinks = [
+  {
+    title: "Home",
+    path: "/",
+  },
+  {
+    title: "Blog",
+    path: "/blog",
+  },
+  {
+    title: "About",
+    path: "/about",
+  },
+];
+
 export const blogCategories = [
   {
     title: "education",

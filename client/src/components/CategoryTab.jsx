@@ -12,7 +12,7 @@ const CategoryTab = () => {
             key={item.title}
             className={`${displayCategoryBadge(
               item.title
-            )} uppercase bg-primary rounded text-white font-semibold px-5 py-2 cursor-default flex items-center gap-2 hover:opacity-90`}
+            )} uppercase rounded text-white font-semibold px-5 py-2 cursor-default flex items-center gap-2 hover:opacity-90`}
           >
             {item.icon}
             {item.title}

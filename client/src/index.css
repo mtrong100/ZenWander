@@ -8,6 +8,12 @@
   }
 }
 
+@layer components {
+  .page-container {
+    @apply w-full max-w-[1170px] px-5 mx-auto;
+  }
+}
+
 .react-multiple-carousel__arrow {
   background-color: #3b82f6 !important;
 }

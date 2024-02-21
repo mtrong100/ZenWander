@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 const Separator = ({ className = "" }) => {
   return (
     <div
-      className={twMerge("bg-gray-300 h-[2px] w-full my-4", className)}
+      className={twMerge("bg-gray-300 h-[1px] w-full my-4", className)}
     ></div>
   );
 };
