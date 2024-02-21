@@ -1,5 +1,31 @@
 import { BookOpen, Code, Cpu, MapPin, Shirt, Trophy } from "lucide-react";
 
+export const orderOptions = [
+  {
+    title: "Lastest",
+    value: "desc",
+  },
+  {
+    title: "Oldest",
+    value: "asc",
+  },
+];
+
+export const sortOptions = [
+  {
+    title: "Title",
+    value: "title",
+  },
+  {
+    title: "Category",
+    value: "category",
+  },
+  {
+    title: "Type",
+    value: "type",
+  },
+];
+
 export const navLinks = [
   {
     title: "Home",

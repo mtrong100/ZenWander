@@ -37,7 +37,7 @@ const stastisticCard = [
 
 const About = () => {
   return (
-    <section className="mt-[80px] mb-[140px]">
+    <section className="my-10">
       {/* BANNER */}
       <div className="grid grid-cols-2 gap-[75px] items-center">
         <div>
@@ -66,7 +66,7 @@ const About = () => {
       </div>
 
       {/* STASTISTIC */}
-      <div className="mt-[140px] grid grid-cols-4 gap-[30px]">
+      <div className="mt-[60px] grid grid-cols-4 gap-[30px]">
         {stastisticCard.map((item) => (
           <div
             key={item.amount}
