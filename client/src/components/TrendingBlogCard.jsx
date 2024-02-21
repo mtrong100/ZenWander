@@ -25,7 +25,7 @@ const TrendingBlogCard = () => {
           <BlogBadge />
         </div>
 
-        <h6 className="text-xl line-clamp-2 font-semibold">
+        <h6 className="text-xl line-clamp-2 font-semibold hover:underline cursor-default">
           {"This is a post title"}
         </h6>
 

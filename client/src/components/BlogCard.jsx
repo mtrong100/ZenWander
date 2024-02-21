@@ -25,7 +25,7 @@ const BlogCard = () => {
           <BlogBadge />
         </div>
 
-        <h6 className="text-2xl font-semibold line-clamp-2">
+        <h6 className="text-2xl font-semibold line-clamp-2 hover:underline cursor-default">
           {"This is a post title"}
         </h6>
 
