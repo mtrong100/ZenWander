@@ -17,7 +17,7 @@ const Button = ({
     <button
       {...props}
       className={twMerge(
-        "px-5 w-fit font-medium text-lg transition-all cursor-pointer h-[48px] rounded-lg",
+        "px-5 w-fit font-medium flex items-center transition-all cursor-pointer h-[48px] rounded-lg",
         variantClasses[variant],
         className
       )}
@@ -28,3 +28,17 @@ const Button = ({
 };
 
 export default Button;
+
+export const ButtonIcon = ({ children, className = "", ...props }) => {
+  return (
+    <button
+      {...props}
+      className={twMerge(
+        "flex items-center border border-gray-300 hover:bg-gray-100 justify-center w-[48px] transition-all cursor-pointer h-[48px] rounded-lg",
+        className
+      )}
+    >
+      {children}
+    </button>
+  );
+};

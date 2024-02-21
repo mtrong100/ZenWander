@@ -6,6 +6,7 @@ import FieldInput from "../components/FieldInput";
 import { Mail, User, Lock } from "lucide-react";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLogin from "../components/GoogleLogin";
 
 const schema = yup.object().shape({
   username: yup.string().trim().required("Username is required"),
@@ -45,6 +46,14 @@ const Register = () => {
     }
   };
 
+  const googleLogin = async () => {
+    try {
+      //...
+    } catch (error) {
+      console.log("Failed to login with google ->", error);
+    }
+  };
+
   return (
     <div className="bg-white shadow-xl rounded-xl p-5 max-w-lg w-full">
       <h1 className="font-bold text-4xl text-center">
@@ -52,8 +61,15 @@ const Register = () => {
       </h1>
 
       <form onSubmit={handleSubmit(registerUser)} className="mt-6">
-        <h1 className="font-medium text-2xl mb-4">Regsier an account</h1>
-        <div className="space-y-5">
+        <GoogleLogin onClick={googleLogin} />
+
+        <div className="flex items-center my-3">
+          <div className="h-[1px] w-full bg-gray-300"></div>
+          <span className="px-3">Or</span>
+          <div className="h-[1px] w-full bg-gray-300"></div>
+        </div>
+
+        <div className="space-y-5 ">
           <FieldInput
             type="text"
             name="username"

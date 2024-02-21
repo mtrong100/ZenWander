@@ -7,3 +7,10 @@
     @apply scroll-smooth;
   }
 }
+
+.react-multiple-carousel__arrow {
+  background-color: #3b82f6 !important;
+}
+.react-multiple-carousel__arrow:hover {
+  background-color: #2563eb !important;
+}

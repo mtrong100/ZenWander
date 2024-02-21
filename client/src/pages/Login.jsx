@@ -6,6 +6,7 @@ import FieldInput from "../components/FieldInput";
 import { Mail, Lock } from "lucide-react";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLogin from "../components/GoogleLogin";
 
 const schema = yup.object().shape({
   email: yup
@@ -44,6 +45,14 @@ const Login = () => {
     }
   };
 
+  const googleLogin = async () => {
+    try {
+      //...
+    } catch (error) {
+      console.log("Failed to login with google ->", error);
+    }
+  };
+
   return (
     <div className="bg-white shadow-xl rounded-xl p-5 max-w-lg w-full">
       <h1 className="font-bold text-4xl text-center">
@@ -51,7 +60,14 @@ const Login = () => {
       </h1>
 
       <form onSubmit={handleSubmit(loginUser)} className="mt-6">
-        <h1 className="font-medium text-2xl mb-4">Sign in to your account</h1>
+        <GoogleLogin onClick={googleLogin} />
+
+        <div className="flex items-center my-3">
+          <div className="h-[1px] w-full bg-gray-300"></div>
+          <span className="px-3">Or</span>
+          <div className="h-[1px] w-full bg-gray-300"></div>
+        </div>
+
         <div className="space-y-5">
           <FieldInput
             type="email"
