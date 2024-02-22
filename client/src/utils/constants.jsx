@@ -1,4 +1,39 @@
-import { BookOpen, Code, Cpu, MapPin, Shirt, Trophy } from "lucide-react";
+import {
+  BookOpen,
+  Code,
+  Cpu,
+  LayoutDashboard,
+  List,
+  MapPin,
+  PlusSquare,
+  Shirt,
+  Trophy,
+  UsersRound,
+} from "lucide-react";
+
+export const sidebarLinks = [
+  {
+    title: "Dashboard",
+    icon: <LayoutDashboard size={20} />,
+    path: "/dashboard",
+  },
+  {
+    title: "Create",
+    icon: <PlusSquare size={20} />,
+    path: "/create-blog",
+  },
+  {
+    title: "Blogs",
+    icon: <List size={20} />,
+    path: "/manage-blogs",
+  },
+
+  {
+    title: "Followers",
+    icon: <UsersRound size={20} />,
+    path: "/manage-followers",
+  },
+];
 
 export const orderOptions = [
   {

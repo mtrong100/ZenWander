@@ -36,7 +36,7 @@ const BlogCard = () => {
           laborum.
         </p>
 
-        <Button variant="secondary" className="h-[42px] px-6">
+        <Button className="h-[42px] px-6">
           Read more <ArrowRight className="ml-1" size={20} />
         </Button>
       </div>
