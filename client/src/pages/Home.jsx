@@ -3,10 +3,14 @@ import Banner from "../components/Banner";
 import BlogSidebar from "../components/shared/BlogSidebar";
 import CategoryTab from "../components/CategoryTab";
 import BlogCard from "../components/BlogCard";
+import { useSelector, useDispatch } from "react-redux";
 
 const Home = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
+
   return (
-    <>
+  <>
       <Banner />
       <section className="my-12">
         <CategoryTab />

@@ -46,6 +46,10 @@ export const sendConfirmationEmail = async (email, token) => {
             border-radius: 5px;
             transition: background-color 0.3s ease;
           }
+          a {
+            text-decoration: none;
+            color: #ffffff;
+          }
           .btn:hover {
             background-color: #0056b3;
           }

@@ -7,11 +7,15 @@ import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/GoogleLogin";
 import { defaultAvatar } from "../utils/constants";
-import { registerApi } from "../api/authApi";
+import { googleLoginApi, registerApi } from "../api/authApi";
 import { toast } from "sonner";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useDispatch } from "react-redux";
+import { storeCurrentUser } from "../redux/slices/userSlice";
 
 const schema = yup.object().shape({
-  username: yup.string().trim().required("Username is required"),
+  name: yup.string().trim().required("Username is required"),
   email: yup
     .string()
     .lowercase()
@@ -27,16 +31,17 @@ const schema = yup.object().shape({
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
-    reset,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "onchange",
     resolver: yupResolver(schema),
     defaultValues: {
-      username: "",
+      name: "",
       password: "",
       email: "",
     },
@@ -67,9 +72,26 @@ const Register = () => {
   };
 
   const googleLogin = async () => {
+    const provider = new GoogleAuthProvider();
+
     try {
-      //...
+      const results = await signInWithPopup(auth, provider);
+      const user = results.user;
+
+      const request = {
+        name: user?.displayName,
+        email: user?.email,
+        avatar: user?.photoURL,
+        provider: "google",
+      };
+
+      const res = await googleLoginApi(request);
+      toast.success(res?.message);
+      localStorage.setItem("ZENWANDER_TOKEN", JSON.stringify(res?.token));
+      dispatch(storeCurrentUser(res?.results));
+      navigate("/");
     } catch (error) {
+      toast.error(error?.response?.data?.message);
       console.log("Failed to login with google ->", error);
     }
   };
@@ -92,11 +114,11 @@ const Register = () => {
         <div className="space-y-5 ">
           <FieldInput
             type="text"
-            name="username"
+            name="name"
             icon={<User color="#3b82f6" size={25} />}
             register={register}
-            errorMessage={errors?.username?.message}
-            placeholder="Enter your username..."
+            errorMessage={errors?.name?.message}
+            placeholder="Enter your name..."
           />
           <FieldInput
             type="email"

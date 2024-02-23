@@ -7,6 +7,10 @@ import { Mail, Lock } from "lucide-react";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/GoogleLogin";
+import { loginApi } from "../api/authApi";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { storeCurrentUser } from "../redux/slices/userSlice";
 
 const schema = yup.object().shape({
   email: yup
@@ -17,15 +21,18 @@ const schema = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
+    .trim()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
-    reset,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "onchange",
@@ -39,17 +46,18 @@ const Login = () => {
 
   const loginUser = async (values) => {
     try {
-      //...
-    } catch (error) {
-      console.log("Failed to register an account ->", error);
-    }
-  };
+      const request = {
+        ...values,
+      };
 
-  const googleLogin = async () => {
-    try {
-      //...
+      const res = await loginApi(request);
+      toast.success(res?.message);
+      localStorage.setItem("ZENWANDER_TOKEN", JSON.stringify(res?.token));
+      dispatch(storeCurrentUser(res?.results));
+      navigate("/");
     } catch (error) {
-      console.log("Failed to login with google ->", error);
+      toast.error(error?.response?.data?.message);
+      console.log("Failed to register an account ->", error);
     }
   };
 
@@ -60,7 +68,7 @@ const Login = () => {
       </h1>
 
       <form onSubmit={handleSubmit(loginUser)} className="mt-6">
-        <GoogleLogin onClick={googleLogin} />
+        <GoogleLogin />
 
         <div className="flex items-center my-3">
           <div className="h-[1px] w-full bg-gray-300"></div>

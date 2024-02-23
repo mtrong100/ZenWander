@@ -17,6 +17,15 @@ export const loginApi = async (request) => {
   return res.data;
 };
 
+export const googleLoginApi = async (request) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/auth/google-login`,
+    request
+  );
+
+  return res.data;
+};
+
 export const verifyEmailApi = async (token) => {
   const res = await axios.get(
     `${import.meta.env.VITE_BASE_URL}/auth/verify-email?token=${token}`

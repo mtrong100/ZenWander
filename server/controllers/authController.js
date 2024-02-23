@@ -46,7 +46,11 @@ export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
-      return next(errorHandler(404, "nout found"));
+      return next(errorHandler(404, "not found"));
+    }
+
+    if (!user.verified) {
+      return next(errorHandler(400, "email was not verified"));
     }
 
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
@@ -54,12 +58,14 @@ export const login = async (req, res, next) => {
       return next(errorHandler(400, "wrong password"));
     }
 
-    const token = await generateToken({ id: user._id, isAdmin: user.isAdmin });
+    const token = await generateToken({ id: user._id });
 
     const {
       password: pass,
       resetPasswordOtp,
       resetPasswordExpires,
+      verified,
+      verificationToken,
       ...rest
     } = user._doc;
 
@@ -83,42 +89,44 @@ export const googleLogin = async (req, res, next) => {
 
       const newUser = new User({
         ...req.body,
+        verified: true,
         password: hash,
       });
 
       await newUser.save();
 
-      const token = await generateToken({
-        id: newUser._id,
-        isAdmin: newUser.isAdmin,
-      });
+      const token = await generateToken({ id: newUser._id });
 
       const {
         password: pass,
         resetPasswordOtp,
         resetPasswordExpires,
+        verified,
+        verificationToken,
         ...rest
       } = newUser._doc;
 
       return res
         .status(201)
         .json({ message: "create user sucessfully", results: rest, token });
-    } else {
-      const token = await generateToken({ id: user._id });
-
-      const {
-        password: pass,
-        resetPasswordOtp,
-        resetPasswordExpires,
-        ...rest
-      } = user._doc;
-
-      return res.status(200).json({
-        message: "login user sucessfully",
-        results: rest,
-        token,
-      });
     }
+
+    const token = await generateToken({ id: user._id });
+
+    const {
+      password: pass,
+      resetPasswordOtp,
+      resetPasswordExpires,
+      verified,
+      verificationToken,
+      ...rest
+    } = user._doc;
+
+    return res.status(200).json({
+      message: "login user sucessfully",
+      results: rest,
+      token,
+    });
   } catch (error) {
     next(error);
   }
