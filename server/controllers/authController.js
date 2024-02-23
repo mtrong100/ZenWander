@@ -22,9 +22,7 @@ export const register = async (req, res, next) => {
     const token = crypto.randomBytes(20).toString("hex");
 
     const newUser = new User({
-      username: req.body.username,
-      avatar: req.body.avatar,
-      email: req.body.email,
+      ...req.body,
       password: hash,
       verificationToken: token,
     });

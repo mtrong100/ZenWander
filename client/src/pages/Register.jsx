@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,6 +6,9 @@ import { Mail, User, Lock } from "lucide-react";
 import Button from "../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "../components/GoogleLogin";
+import { defaultAvatar } from "../utils/constants";
+import { registerApi } from "../api/authApi";
+import { toast } from "sonner";
 
 const schema = yup.object().shape({
   username: yup.string().trim().required("Username is required"),
@@ -18,11 +20,13 @@ const schema = yup.object().shape({
     .required("Email is required"),
   password: yup
     .string()
+    .trim()
     .min(8, "Password must be at least 8 characters")
     .required("Password is required"),
 });
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -40,9 +44,25 @@ const Register = () => {
 
   const registerUser = async (values) => {
     try {
-      //...
+      const request = {
+        ...values,
+        provider: "email/password",
+        avatar: defaultAvatar,
+      };
+
+      const res = await registerApi(request);
+
+      if (res?.verificationToken) {
+        toast.info(
+          "Create user sucessfully. Please verify your email to login"
+        );
+      }
+
+      console.log(res);
+      navigate("/login");
     } catch (error) {
       console.log("Failed to register an account ->", error);
+      toast.error("Failed to register an account");
     }
   };
 
@@ -105,7 +125,6 @@ const Register = () => {
           <Button
             type="submit"
             disabled={isSubmitting}
-            variant="secondary"
             className="w-full rounded-full"
           >
             {isSubmitting ? "Loading..." : "Create an account"}
