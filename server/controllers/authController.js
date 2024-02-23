@@ -1,8 +1,12 @@
 import bcrypt from "bcrypt";
+import crypto from "crypto";
 import User from "../models/userModel.js";
 import { errorHandler } from "../utils/errorHandler.js";
-import { autoGeneratePassword, generateToken } from "../utils/hepler.js";
-import { sendOtpToEmail } from "../services/nodemail.js";
+import {
+  sendConfirmationEmail,
+  sendOtpResetPassword,
+} from "../utils/nodemail.js";
+import { autoGeneratePassword, generateToken } from "../utils/helper.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -14,14 +18,27 @@ export const register = async (req, res, next) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
+    // Generate verification token
+    const token = crypto.randomBytes(20).toString("hex");
+
     const newUser = new User({
-      ...req.body,
+      username: req.body.username,
+      avatar: req.body.avatar,
+      email: req.body.email,
       password: hash,
+      verificationToken: token,
     });
 
     await newUser.save();
 
-    return res.status(201).json({ message: "create user sucessfully" });
+    const { verificationToken } = newUser._doc;
+
+    // Send comfirmation email
+    sendConfirmationEmail(req.body.email, verificationToken);
+
+    return res
+      .status(201)
+      .json({ message: "create user sucessfully", verificationToken });
   } catch (error) {
     next(error);
   }
@@ -89,10 +106,7 @@ export const googleLogin = async (req, res, next) => {
         .status(201)
         .json({ message: "create user sucessfully", results: rest, token });
     } else {
-      const token = await generateToken({
-        id: user._id,
-        isAdmin: user.isAdmin,
-      });
+      const token = await generateToken({ id: user._id });
 
       const {
         password: pass,
@@ -107,6 +121,30 @@ export const googleLogin = async (req, res, next) => {
         token,
       });
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.query;
+
+    const user = await User.findOne({ verificationToken: token });
+
+    if (!user) {
+      return res.status(400).json({ error: "Invalid verification token" });
+    }
+
+    user.verified = true;
+
+    const newUser = await user.save();
+
+    const { verified } = newUser._doc;
+
+    return res
+      .status(200)
+      .json({ message: "Verify email successfully", verified });
   } catch (error) {
     next(error);
   }
@@ -171,7 +209,7 @@ export const sendOtp = async (req, res, next) => {
     user.resetPasswordExpires = new Date(Date.now() + 5 * 60 * 1000);
 
     await user.save();
-    await sendOtpToEmail(user.email, otp);
+    await sendOtpResetPassword(user.email, otp);
 
     return res
       .status(200)
