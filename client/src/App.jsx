@@ -13,6 +13,8 @@ import ManageBlog from "./pages/manage/ManageBlog";
 import ManageFollower from "./pages/manage/ManageFollower";
 import CreatePost from "./pages/manage/CreatePost";
 import Profile from "./pages/Profile";
+import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
       <Route element={<AuthLayout />}>
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
       </Route>
 
       <Route element={<MainLayout />}>

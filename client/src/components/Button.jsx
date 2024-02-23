@@ -17,7 +17,7 @@ const Button = ({
     <button
       {...props}
       className={twMerge(
-        "px-5 w-fit font-medium flex items-center transition-all cursor-pointer h-[48px] rounded-lg",
+        "px-5 w-fit font-medium flex items-center justify-center transition-all cursor-pointer h-[48px] rounded-lg",
         variantClasses[variant],
         className
       )}

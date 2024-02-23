@@ -68,6 +68,14 @@ export const sendConfirmationEmail = async (email, token) => {
     text: `Thanks for creating a ZenWander account. Verify your email so you can get up and running quickly.`,
     html: htmlContent,
   };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Failed to send email:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
 };
 
 export const sendOtpResetPassword = async (email, otp) => {
@@ -78,4 +86,12 @@ export const sendOtpResetPassword = async (email, otp) => {
     text: `Your OTP for password reset is`,
     html: `<h1>${otp}</h1>`,
   };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Failed to send email:", error);
+    } else {
+      console.log("Email sent:", info.response);
+    }
+  });
 };

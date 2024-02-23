@@ -9,7 +9,10 @@ const AuthLayout = () => {
   };
 
   return (
-    <div className="flex items-center h-screen justify-center" style={bgStyle}>
+    <div
+      className="flex items-center h-screen justify-center bg-gradient-to-r from-cyan-400 to-blue-400"
+      // style={bgStyle}
+    >
       <Outlet />
     </div>
   );
