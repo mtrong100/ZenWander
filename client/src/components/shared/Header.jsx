@@ -4,15 +4,21 @@ import Button from "../Button";
 import { navLinks } from "../../utils/constants";
 import { Popover, Transition } from "@headlessui/react";
 import { LayoutDashboard, LogOut, User } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { storeCurrentUser } from "../../redux/slices/userSlice";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
   const { currentUser } = useSelector((state) => state.user);
   const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || null);
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    localStorage.removeItem("ZENWANDER_TOKEN");
+    dispatch(storeCurrentUser(null));
+  };
 
   return (
     <header className="p-5  max-w-[1920px] mx-auto sticky top-0 bg-white z-[9999] shadow-sm border-b border-gray-200">

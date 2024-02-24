@@ -15,6 +15,7 @@ import CreatePost from "./pages/manage/CreatePost";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
+import Help from "./pages/Help";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/help" element={<Help />} />
       </Route>
 
       <Route element={<MainLayout />}>

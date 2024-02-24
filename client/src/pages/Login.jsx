@@ -94,11 +94,20 @@ const Login = () => {
             placeholder="Enter your password..."
           />
 
-          <div className="text-sm font-medium">
-            <span className="opacity-70">Not have an account? </span>
-            <Link className="hover:underline text-primary" to="/register">
-              Register
-            </Link>
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-medium">
+              <span className="opacity-70">Not have an account? </span>
+              <Link className="hover:underline text-primary" to="/register">
+                Register
+              </Link>
+            </div>
+
+            <div className="text-sm font-medium">
+              <span className="opacity-70">Need </span>
+              <Link className="hover:underline text-primary" to="/help">
+                help?
+              </Link>
+            </div>
           </div>
 
           <Button
