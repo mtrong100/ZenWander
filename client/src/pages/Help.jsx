@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Disclosure } from "@headlessui/react";
 import { ChevronUp, Mail, SendHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
+import useOnchange from "../hooks/useOnchange";
+import { toast } from "sonner";
+import { resendOtplApi, resendVerifyEmailApi } from "../api/authApi";
 
 const Help = () => {
   return (
@@ -87,6 +90,24 @@ const Help = () => {
 export default Help;
 
 function SendVerifyEmail() {
+  const [isSending, setIsSending] = useState(false);
+  const { value, handleChange, setValue } = useOnchange();
+
+  const handleSendVerifyEmail = async () => {
+    try {
+      setIsSending(true);
+      const res = await resendVerifyEmailApi({ email: value });
+      toast.success(res?.message);
+      setIsSending(false);
+      setValue("");
+    } catch (error) {
+      toast.error("Failed so send verify email");
+      console.log("Failed so send verify email ->", error);
+      setIsSending(false);
+      setValue("");
+    }
+  };
+
   return (
     <div>
       <div className="relative">
@@ -95,20 +116,46 @@ function SendVerifyEmail() {
         </div>
         <input
           type="email"
+          value={value}
           placeholder="Enter your email"
+          onChange={handleChange}
           className={
             "w-full p-3  border-gray-300 transition-all caret-primary border focus:border-primary outline-none rounded-lg shadow-sm pl-12"
           }
         />
       </div>
-      <Button className="mt-3 h-[45px] ml-auto">
-        Send <SendHorizontal className="ml-1" size={16} />
+      <Button onClick={handleSendVerifyEmail} className="mt-3 h-[45px] ml-auto">
+        {isSending ? (
+          "Sending..."
+        ) : (
+          <>
+            Send <SendHorizontal className="ml-1" size={16} />
+          </>
+        )}
       </Button>
     </div>
   );
 }
 
 function SendOtp() {
+  const [isSending, setIsSending] = useState(false);
+  const { value, handleChange, setValue } = useOnchange();
+
+  const handleSendOtp = async () => {
+    try {
+      setIsSending(true);
+      const res = await resendOtplApi({ email: value });
+      toast.success(res?.message);
+      setIsSending(false);
+      setValue("");
+    } catch (error) {
+      toast.error("Failed so send OTP");
+      console.log("Failed so send OTP ->", error);
+      setIsSending(false);
+      setValue("");
+    }
+  };
+
   return (
     <div>
       <div className="relative">
@@ -117,14 +164,22 @@ function SendOtp() {
         </div>
         <input
           type="email"
+          value={value}
           placeholder="Enter your email"
+          onChange={handleChange}
           className={
             "w-full p-3  border-gray-300 transition-all caret-primary border focus:border-primary outline-none rounded-lg shadow-sm pl-12"
           }
         />
       </div>
-      <Button className="mt-3 h-[45px] ml-auto">
-        Send <SendHorizontal className="ml-1" size={16} />
+      <Button onClick={handleSendOtp} className="mt-3 h-[45px] ml-auto">
+        {isSending ? (
+          "Sending..."
+        ) : (
+          <>
+            Send <SendHorizontal className="ml-1" size={16} />
+          </>
+        )}
       </Button>
     </div>
   );

@@ -41,14 +41,10 @@ export const sendConfirmationEmail = async (email, token) => {
             display: inline-block;
             padding: 10px 20px;
             background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
+            color: #ffffff !important;
+            text-decoration: none !important;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-          }
-          a {
-            text-decoration: none;
-            color: #ffffff;
           }
           .btn:hover {
             background-color: #0056b3;

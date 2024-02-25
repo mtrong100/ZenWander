@@ -70,7 +70,7 @@ export const login = async (req, res, next) => {
     } = user._doc;
 
     return res
-      .status(201)
+      .status(200)
       .json({ message: "login user sucessfully", results: rest, token });
   } catch (error) {
     next(error);
@@ -198,12 +198,62 @@ export const resetPassword = async (req, res, next) => {
 
 export const sendOtp = async (req, res, next) => {
   const { email } = req.body;
-  console.log(email);
 
   try {
     const user = await User.findOne({ email });
 
     // Check user
+    if (!user) {
+      return next(errorHandler(404, "not found"));
+    }
+
+    // Generate OTP code and expire time
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    user.resetPasswordOtp = otp;
+    user.resetPasswordExpires = new Date(Date.now() + 5 * 60 * 1000);
+
+    await user.save();
+    await sendOtpResetPassword(user.email, otp);
+
+    return res
+      .status(200)
+      .json({ message: "OTP code has been sent to your email" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resendVerifyEmail = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return next(errorHandler(404, "not found"));
+    }
+
+    // Generate verification token
+    const token = crypto.randomBytes(20).toString("hex");
+
+    user.verificationToken = token;
+
+    await user.save();
+
+    const { verificationToken } = user._doc;
+
+    // Send comfirmation email
+    sendConfirmationEmail(req.body.email, verificationToken);
+
+    return res
+      .status(200)
+      .json({ message: "Verification email has been sent" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resendOtp = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
     if (!user) {
       return next(errorHandler(404, "not found"));
     }

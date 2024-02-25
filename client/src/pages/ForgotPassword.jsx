@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import FieldInput from "../components/FieldInput";
 import { Mail, Lock } from "lucide-react";
 import Button from "../components/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { resetPasswordApi, sendOtpResetPasswordApi } from "../api/authApi";
 
 const schema = yup.object().shape({
   password: yup
@@ -32,9 +33,14 @@ const schema = yup.object().shape({
 });
 
 const ForgotPassword = () => {
+  const navigate = useNavigate();
+  const [isSending, setIsSending] = useState(false);
+
   const {
     register,
     handleSubmit,
+    getValues,
+    trigger,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "onchange",
@@ -49,11 +55,32 @@ const ForgotPassword = () => {
 
   const resetPassword = async (values) => {
     try {
-      //...
-      console.log(values);
+      const request = {
+        ...values,
+      };
+      const res = resetPasswordApi(request);
+      toast.success(res?.message);
+      navigate("/login");
     } catch (error) {
       toast.error("Failed to reset password");
       console.log("Failed to reset password ->", error);
+    }
+  };
+
+  const sendOtp = async () => {
+    try {
+      setIsSending(true);
+      await trigger("email");
+      const email = getValues("email");
+
+      const res = await sendOtpResetPasswordApi({ email });
+
+      toast.success(res?.message);
+      setIsSending(false);
+    } catch (error) {
+      toast.error("Failed to send OTP");
+      console.log("Failed to send OTP ->", error);
+      setIsSending(false);
     }
   };
 
@@ -100,7 +127,9 @@ const ForgotPassword = () => {
                 />
               </div>
 
-              <Button type="button">Send OTP</Button>
+              <Button disabled={isSending} onClick={sendOtp} type="button">
+                {isSending ? "Sending..." : "Send OTP"}
+              </Button>
             </div>
 
             {errors && (

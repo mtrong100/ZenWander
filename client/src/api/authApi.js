@@ -51,3 +51,21 @@ export const resetPasswordApi = async (request) => {
 
   return res.data;
 };
+
+export const resendVerifyEmailApi = async (request) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/auth/resend-verify-email`,
+    request
+  );
+
+  return res.data;
+};
+
+export const resendOtplApi = async (request) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/auth/resend-otp`,
+    request
+  );
+
+  return res.data;
+};
