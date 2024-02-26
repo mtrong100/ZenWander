@@ -11,7 +11,7 @@ import Category from "./pages/Category";
 import Dashboard from "./pages/manage/Dashboard";
 import ManageBlog from "./pages/manage/ManageBlog";
 import ManageFollower from "./pages/manage/ManageFollower";
-import CreatePost from "./pages/manage/CreatePost";
+import CreateBlog from "./pages/manage/CreateBlog";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -40,7 +40,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/manage-blogs" element={<ManageBlog />} />
         <Route path="/manage-followers" element={<ManageFollower />} />
-        <Route path="/create-blog" element={<CreatePost />} />
+        <Route path="/create-blog" element={<CreateBlog />} />
       </Route>
     </Routes>
   );

@@ -68,14 +68,6 @@ const Login = () => {
       </h1>
 
       <form onSubmit={handleSubmit(loginUser)} className="mt-6">
-        <GoogleLogin />
-
-        <div className="flex items-center my-3">
-          <div className="h-[1px] w-full bg-gray-300"></div>
-          <span className="px-3">Or</span>
-          <div className="h-[1px] w-full bg-gray-300"></div>
-        </div>
-
         <div className="space-y-5">
           <FieldInput
             type="email"

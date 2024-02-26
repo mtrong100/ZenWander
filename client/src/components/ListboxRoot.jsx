@@ -1,12 +1,9 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-import { blogCategories } from "../utils/constants";
 import { twMerge } from "tailwind-merge";
 
-const CategoryListbox = ({ className = "" }) => {
-  const [selected, setSelected] = useState("Select category");
-
+const ListboxRoot = ({ className = "", selected, setSelected, list = [] }) => {
   return (
     <div className={twMerge("w-[250px]", className)}>
       <Listbox value={selected} onChange={setSelected}>
@@ -23,8 +20,8 @@ const CategoryListbox = ({ className = "" }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg  text-sm">
-              {blogCategories.map((item) => (
+            <Listbox.Options className="absolute mt-1 z-40 border max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg  text-sm">
+              {list.map((item) => (
                 <Listbox.Option
                   key={item.title}
                   className={({ active }) =>
@@ -60,4 +57,4 @@ const CategoryListbox = ({ className = "" }) => {
   );
 };
 
-export default CategoryListbox;
+export default ListboxRoot;
