@@ -2,6 +2,19 @@ import Blog from "../models/blogModel.js";
 import { queryParams } from "../utils/constants.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
+export const createBlog = async (req, res, next) => {
+  try {
+    const newBlog = new Blog(req.body);
+    await newBlog.save();
+
+    return res
+      .status(201)
+      .json({ message: "Create new blog sucessfully", results: newBlog });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getBlogDetail = async (req, res, next) => {
   const { id } = req.params;
 

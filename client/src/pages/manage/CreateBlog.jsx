@@ -4,16 +4,18 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import FieldInput from "../../components/FieldInput";
-import { Pen, Upload, User, X } from "lucide-react";
+import { Pen, X } from "lucide-react";
 import UploadThumbnail from "../../components/UploadThumbnail";
 import Textarea from "../../components/Textarea";
-import CategoryListbox from "../../components/CategoryListbox";
 import ListboxRoot from "../../components/ListboxRoot";
 import { blogCategories, blogStatus } from "../../utils/constants";
 import Button from "../../components/Button";
 import JoditEditor from "jodit-react";
 import { toast } from "sonner";
 import useUploadImage from "../../hooks/useUploadImage";
+import slugify from "slugify";
+import { useSelector } from "react-redux";
+import { createBlogApi } from "../../api/blogApi";
 
 const schema = yup.object().shape({
   title: yup
@@ -25,12 +27,12 @@ const schema = yup.object().shape({
   description: yup
     .string()
     .trim()
-    .min(10, "Description is too short")
-    .max(350, "Description is only at least 300 characters")
+    .min(50, "Description is too short")
     .required("Description is required"),
 });
 
 const CreateBlog = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const [selectedCategory, setSelectedCategory] = useState("Choose category");
   const [selectedStatus, setSelectedStatus] = useState("Choose status");
   const [content, setContent] = useState("");
@@ -40,6 +42,7 @@ const CreateBlog = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm({
     mode: "onchange",
@@ -50,14 +53,32 @@ const CreateBlog = () => {
     },
   });
 
-  const createBlog = async () => {
-    if (!(image || selectedCategory || selectedStatus || content.trim())) {
+  const createNewBlog = async (values) => {
+    if (!(image || selectedCategory || content.trim())) {
       toast.info("Please fullfill the form");
       return;
     }
 
     try {
-      const request = {};
+      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || null);
+      const request = {
+        ...values,
+        slug: slugify(values.title, { lower: true }),
+        content,
+        category: selectedCategory,
+        status: selectedStatus,
+        thumbnail: image,
+        author: currentUser?._id,
+      };
+
+      const res = await createBlogApi(token, request);
+      console.log(res);
+      toast.success(res?.message);
+
+      reset();
+      setContent("");
+      setSelectedCategory("Choose category");
+      setSelectedStatus("Choose status");
     } catch (error) {
       toast.error("Failed to create new blog");
       console.log("Failed to create new blog ->", error);
@@ -69,7 +90,7 @@ const CreateBlog = () => {
       <TitleSection>Create new blog</TitleSection>
 
       <div className="my-10 w-full max-w-4xl mx-auto">
-        <form onSubmit={handleSubmit(createBlog)} className="space-y-5">
+        <form onSubmit={handleSubmit(createNewBlog)} className="space-y-5">
           {/* Thumbnail */}
           <div className="space-y-2">
             <label className="font-semibold text-lg" htmlFor="thumbnail">
@@ -166,8 +187,8 @@ const CreateBlog = () => {
             />
           </div>
 
-          <Button type="submit" isLoading={isSubmitting} className="w-full">
-            Create blog
+          <Button type="submit" disabled={isSubmitting} className="w-full">
+            {isSubmitting ? "Creating blog..." : "Create blog"}
           </Button>
         </form>
       </div>
