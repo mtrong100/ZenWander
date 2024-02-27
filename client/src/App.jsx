@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import Help from "./pages/Help";
+import UpdateBlog from "./pages/manage/UpdateBlog";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/manage-blogs" element={<ManageBlog />} />
         <Route path="/manage-followers" element={<ManageFollower />} />
         <Route path="/create-blog" element={<CreateBlog />} />
+        <Route path="/update-blog/:id" element={<UpdateBlog />} />
       </Route>
     </Routes>
   );

@@ -1,7 +1,5 @@
 import React from "react";
 import Searchbox from "../components/Searchbox";
-import CategoryListbox from "../components/CategoryListbox";
-import Popoverbox from "../components/Popoverbox";
 import BlogCard from "../components/BlogCard";
 import TrendingBlogCard from "../components/TrendingBlogCard";
 
@@ -14,9 +12,7 @@ const Blog = () => {
 
       <div>
         <div className="flex items-center gap-3">
-          <CategoryListbox />
           <Searchbox />
-          <Popoverbox />
         </div>
 
         <ul className="grid grid-cols-4 gap-3 mt-6">

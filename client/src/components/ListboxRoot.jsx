@@ -1,15 +1,25 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 
-const ListboxRoot = ({ className = "", selected, setSelected, list = [] }) => {
+const ListboxRoot = ({
+  className = "",
+  selected,
+  setSelected,
+  list = [],
+  placeholder = "",
+}) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div className={twMerge("w-[250px]", className)}>
       <Listbox value={selected} onChange={setSelected}>
         <div className="relative mt-1">
           <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white p-3 border border-gray-300 text-left ">
-            <span className="block truncate capitalize">{selected}</span>
+            <span className="block truncate capitalize">
+              {selected || placeholder}
+            </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronsUpDownIcon size={20} />
             </span>
@@ -24,12 +34,12 @@ const ListboxRoot = ({ className = "", selected, setSelected, list = [] }) => {
               {list.map((item) => (
                 <Listbox.Option
                   key={item.title}
+                  value={item.title}
                   className={({ active }) =>
                     `relative cursor-default select-none py-2 pl-10 pr-4 ${
                       active ? "bg-gray-100 " : "text-gray-900"
                     }`
                   }
-                  value={item.title}
                 >
                   {({ selected }) => (
                     <>

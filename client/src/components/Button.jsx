@@ -2,7 +2,7 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 const variantClasses = {
-  primary: "bg-primary hover:bg-primary/90 text-white",
+  primary: "bg-primary hover:bg-blue-600 text-white",
   secondary:
     "border border-primary hover:bg-primary text-primary hover:text-white",
 };

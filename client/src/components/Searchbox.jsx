@@ -1,5 +1,5 @@
 import { Search } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 import { twMerge } from "tailwind-merge";
 
 const Searchbox = ({

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TitleSection from "../../components/TitleSection";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
@@ -14,8 +14,10 @@ import JoditEditor from "jodit-react";
 import { toast } from "sonner";
 import useUploadImage from "../../hooks/useUploadImage";
 import slugify from "slugify";
-import { useSelector } from "react-redux";
-import { createBlogApi } from "../../api/blogApi";
+import { useDispatch, useSelector } from "react-redux";
+import { updateBlogApi } from "../../api/blogApi";
+import { useParams } from "react-router-dom";
+import useGetBlogDetail from "../../hooks/useGetBlogDetail";
 
 const schema = yup.object().shape({
   title: yup
@@ -31,7 +33,9 @@ const schema = yup.object().shape({
     .required("Description is required"),
 });
 
-const CreateBlog = () => {
+const UpdateBlog = () => {
+  const { id } = useParams();
+  const { blog } = useGetBlogDetail(id);
   const { currentUser } = useSelector((state) => state.user);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -53,8 +57,22 @@ const CreateBlog = () => {
     },
   });
 
-  const createNewBlog = async (values) => {
-    if (!(image || selectedCategory || content.trim() || selectedStatus)) {
+  useEffect(() => {
+    if (blog) {
+      const { thumbnail, category, status, title, description, content } = blog;
+      setImage(thumbnail);
+      setSelectedCategory(category);
+      setSelectedStatus(status);
+      setContent(blog?.content);
+      reset({
+        title,
+        description,
+      });
+    }
+  }, [blog, reset, setImage, setSelectedCategory, setSelectedStatus]);
+
+  const updateBlog = async (values) => {
+    if (!(image || selectedCategory || content.trim())) {
       toast.info("Please fullfill the form");
       return;
     }
@@ -71,27 +89,20 @@ const CreateBlog = () => {
         author: currentUser?._id,
       };
 
-      const res = await createBlogApi(token, request);
-      console.log(res);
+      const res = await updateBlogApi(token, id, request);
       toast.success(res?.message);
-
-      reset();
-      setContent("");
-      setImage("");
-      setSelectedCategory("");
-      setSelectedStatus("");
     } catch (error) {
-      toast.error("Failed to create new blog");
-      console.log("Failed to create new blog ->", error);
+      toast.error("Failed to update blog");
+      console.log("Failed to update blog ->", error);
     }
   };
 
   return (
     <section>
-      <TitleSection>Create new blog</TitleSection>
+      <TitleSection>Update blog #{id}</TitleSection>
 
       <div className="my-10 w-full max-w-4xl mx-auto">
-        <form onSubmit={handleSubmit(createNewBlog)} className="space-y-5">
+        <form onSubmit={handleSubmit(updateBlog)} className="space-y-5">
           {/* Thumbnail */}
           <div className="space-y-2">
             <label className="font-semibold text-lg" htmlFor="thumbnail">
@@ -191,7 +202,7 @@ const CreateBlog = () => {
           </div>
 
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? "Creating blog..." : "Create blog"}
+            {isSubmitting ? "Updating blog..." : "Update blog"}
           </Button>
         </form>
       </div>
@@ -199,4 +210,4 @@ const CreateBlog = () => {
   );
 };
 
-export default CreateBlog;
+export default UpdateBlog;
