@@ -10,6 +10,7 @@ export const getAllBlogs = async (req, res, next) => {
     sort = queryParams.SORT,
     order = queryParams.ORDER,
     query,
+    category,
   } = req.query;
 
   try {
@@ -17,6 +18,10 @@ export const getAllBlogs = async (req, res, next) => {
 
     if (query) {
       filter.title = new RegExp(query, "i");
+    }
+
+    if (category) {
+      filter.category = category;
     }
 
     const options = {
@@ -43,48 +48,6 @@ export const getAllBlogs = async (req, res, next) => {
   }
 };
 
-export const getBlogsByCategory = async (req, res, next) => {
-  const {
-    page = queryParams.PAGE,
-    limit = queryParams.LIMIT,
-    sort = queryParams.SORT,
-    order = queryParams.ORDER,
-    query,
-  } = req.query;
-
-  const { category } = req.params;
-
-  try {
-    const filter = { category };
-
-    if (query) {
-      filter.title = new RegExp(query, "i");
-    }
-
-    const options = {
-      page,
-      limit,
-      sort: {
-        [sort]: order === "asc" ? 1 : -1,
-      },
-      populate: {
-        path: "author",
-        select: "name email _id avatar provider verified",
-      },
-    };
-
-    const data = await Blog.paginate(filter, options);
-
-    if (!data.docs || data.docs.length === 0) {
-      next(errorHandler(404, "Not found"));
-    }
-
-    return res.status(200).json(data);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getBlogDetail = async (req, res, next) => {
   const { id } = req.params;
 
@@ -101,7 +64,6 @@ export const getBlogDetail = async (req, res, next) => {
   }
 };
 
-/* GET BLOGS FROM USERS */
 export const getBlogsFromUser = async (req, res, next) => {
   const {
     page = queryParams.PAGE,
@@ -115,14 +77,14 @@ export const getBlogsFromUser = async (req, res, next) => {
   const { authorId } = req.params;
 
   try {
-    const filter = { author: authorId }; // Filter by author ID
+    const filter = { author: authorId };
 
     if (query) {
       filter.title = new RegExp(query, "i");
     }
 
     if (category) {
-      filter.category = category; // Filter by category
+      filter.category = category;
     }
 
     const options = {

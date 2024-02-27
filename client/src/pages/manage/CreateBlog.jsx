@@ -72,7 +72,6 @@ const CreateBlog = () => {
       };
 
       const res = await createBlogApi(token, request);
-      console.log(res);
       toast.success(res?.message);
 
       reset();

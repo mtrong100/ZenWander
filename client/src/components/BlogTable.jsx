@@ -35,7 +35,7 @@ const BlogTable = forwardRef((_, ref) => {
 
   return (
     <div className="overflow-x-auto mt-5">
-      <table ref={ref} className="table-auto w-full border-collapse ">
+      <table ref={ref} className="table-auto w-full border-collapse">
         <thead>
           <tr className="bg-white text-left">
             <th className="p-4 border w-[450px]">Title</th>
@@ -52,7 +52,9 @@ const BlogTable = forwardRef((_, ref) => {
               key={index}
               className={index % 2 === 0 ? "bg-slate-100" : "bg-white"}
             >
-              <td className="border p-4 capitalize">{item?.title}</td>
+              <td className="border p-4 capitalize">
+                <p className="line-clamp-2">{item?.title}</p>
+              </td>
               <td className="border p-4 capitalize">{item?.author?.name}</td>
               <td className="border p-4 capitalize">{item?.category}</td>
               <td className="border p-4 capitalize">{item?.status}</td>

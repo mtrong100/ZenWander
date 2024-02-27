@@ -28,7 +28,6 @@ const ManageBlog = () => {
   const tableRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
   const { isLoading, blogs } = useSelector((state) => state.blog);
-
   const [nextPage, setNextPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(0);
@@ -46,7 +45,7 @@ const ManageBlog = () => {
     fetchBlogs();
   }, [dispatch, nextPage, order, searchQuery, selectedCategory, sort]);
 
-  // Fetching blogs
+  // Fetching blogs from user
   async function fetchBlogs() {
     dispatch(loadingBlogs(true));
     const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
