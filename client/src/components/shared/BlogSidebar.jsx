@@ -1,18 +1,43 @@
-import React from "react";
-import TrendingBlogCard from "../TrendingBlogCard";
+import React, { useEffect, useState } from "react";
+import BlogCard, { BlogCardSkeleton } from "../BlogCard";
+import { getAllBlogsApi } from "../../api/blogApi";
+import { toast } from "sonner";
 
 const BlogSidebar = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  async function fetchBlogs() {
+    try {
+      setIsLoading(true);
+      const data = await getAllBlogsApi({ limit: 3, status: "Trending" });
+      setBlogs(data?.docs);
+      setIsLoading(false);
+    } catch (error) {
+      toast.error("Failed to fetch lastest blogs");
+      console.log("Failed to fetch lastest blogs ->", error);
+      setIsLoading(false);
+      setBlogs([]);
+    }
+  }
+
   return (
     <div className="space-y-6">
       {/* Trending Blogs */}
       <div>
         <h1 className="font-semibold text-2xl mb-3">Trending Blogs</h1>
         <ul className="flex flex-col gap-5">
-          {Array(3)
-            .fill(0)
-            .map((item, index) => (
-              <TrendingBlogCard key={index} />
-            ))}
+          {isLoading &&
+            Array(3)
+              .fill(0)
+              .map((item, index) => <BlogCardSkeleton key={index} />)}
+
+          {!isLoading &&
+            blogs?.map((item) => <BlogCard key={item?._id} data={item} />)}
         </ul>
       </div>
 

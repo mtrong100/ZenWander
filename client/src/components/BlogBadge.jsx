@@ -1,6 +1,6 @@
 import React from "react";
 
-const BlogBadge = () => {
+const BlogBadge = ({ category }) => {
   const displayBadge = (value) => {
     switch (value) {
       case "education":
@@ -24,10 +24,10 @@ const BlogBadge = () => {
   return (
     <span
       className={`${displayBadge(
-        "education"
+        category
       )} text-xs bg-opacity-10 capitalize py-2 font-bold rounded-xl px-4`}
     >
-      {"education"}
+      {category}
     </span>
   );
 };

@@ -11,6 +11,7 @@ export const getAllBlogs = async (req, res, next) => {
     order = queryParams.ORDER,
     query,
     category,
+    status,
   } = req.query;
 
   try {
@@ -22,6 +23,10 @@ export const getAllBlogs = async (req, res, next) => {
 
     if (category) {
       filter.category = category;
+    }
+
+    if (status) {
+      filter.status = status;
     }
 
     const options = {

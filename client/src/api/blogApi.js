@@ -1,17 +1,15 @@
 import axios from "axios";
 import { blogParams } from "../utils/constants";
 
-export const getAllBlogsApi = async (
-  accessToken,
-  {
-    page = blogParams.PAGE,
-    limit = blogParams.LIMIT,
-    sort = blogParams.SORT,
-    order = blogParams.ORDER,
-    category,
-    query,
-  } = {}
-) => {
+export const getAllBlogsApi = async ({
+  page = blogParams.PAGE,
+  limit = blogParams.LIMIT,
+  sort = blogParams.SORT,
+  order = blogParams.ORDER,
+  category,
+  query,
+  status,
+} = {}) => {
   try {
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/all`, {
       params: {
@@ -21,9 +19,10 @@ export const getAllBlogsApi = async (
         limit,
         sort,
         order,
+        status,
       },
-      headers: { token: `Bearer ${accessToken}` },
     });
+
     return res.data;
   } catch (error) {
     console.error("Error fetching data:", error);
