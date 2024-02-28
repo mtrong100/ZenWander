@@ -57,7 +57,10 @@ export const getBlogDetail = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const data = await Blog.findById(id);
+    const data = await Blog.findById(id).populate({
+      path: "author",
+      select: "name email _id avatar provider verified",
+    });
 
     if (!data) {
       return next(errorHandler(404, "not found"));

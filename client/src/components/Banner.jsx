@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -92,7 +92,7 @@ function BlogItem({ item }) {
   return (
     <div className="w-full my-6">
       <div className="relative w-full h-[500px] 2xl:h-[600px] flex  ">
-        <Link to={`/`} className="w-full ">
+        <Link to={`/blog/${item?._id}`} className="w-full ">
           <img
             src={item?.thumbnail}
             alt={item?.title}
@@ -101,7 +101,7 @@ function BlogItem({ item }) {
         </Link>
 
         <div className="absolute flex flex-col md:right-10 bottom-10 md:bottom-2 w-full md:w-2/4 lg:w-1/3 2xl:w-[480px]  shadow-2xl p-5 bg-white rounded-lg gap-3">
-          <Link to={`/`}>
+          <Link to={`/blog/${item?._id}`}>
             <h1 className="font-semibold text-2xl line-clamp-2">
               {item?.title}
             </h1>
@@ -110,7 +110,9 @@ function BlogItem({ item }) {
           <div className="flex-1 overflow-hidden line-clamp-4 text-gray-700 text-sm text-justify">
             {item?.description}
           </div>
-          <Button>Continue reading</Button>
+          <Link to={`/blog/${item?._id}`} className="inline-block">
+            <Button>Continue reading</Button>
+          </Link>
           <Link to={`/`} className="flex gap-3 items-center">
             <img
               src={item?.author?.avatar}

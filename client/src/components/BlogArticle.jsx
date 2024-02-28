@@ -9,7 +9,7 @@ import Skeleton from "./Skeleton";
 const BlogArticle = ({ data }) => {
   return (
     <div className={"grid md:grid-cols-2 gap-5"}>
-      <Link to={`/`}>
+      <Link to={`/blog/${data?._id}`}>
         <div className="aspect-video">
           <img
             src={data?.thumbnail}
@@ -27,17 +27,22 @@ const BlogArticle = ({ data }) => {
           <BlogBadge category={data?.category} />
         </div>
 
-        <h6 className="text-xl font-semibold line-clamp-2 hover:underline cursor-default">
+        <Link
+          to={`/blog/${data?._id}`}
+          className="text-xl font-semibold line-clamp-2 hover:underline cursor-default"
+        >
           {data?.title}
-        </h6>
+        </Link>
 
         <p className="flex-1 overflow-hidden text-gray-600 line-clamp-3 text-sm text-justify">
           {data?.description}
         </p>
 
-        <Button className="h-[42px] px-6">
-          Read more <ArrowRight className="ml-1" size={20} />
-        </Button>
+        <Link to={`/blog/${data?._id}`} className="inline-block">
+          <Button className="h-[42px] px-6">
+            Read more <ArrowRight className="ml-1" size={20} />
+          </Button>
+        </Link>
       </div>
     </div>
   );

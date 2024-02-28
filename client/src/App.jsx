@@ -17,6 +17,7 @@ import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import Help from "./pages/Help";
 import UpdateBlog from "./pages/manage/UpdateBlog";
+import BlogDetail from "./pages/BlogDetail";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/category/:slug" element={<Category />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
       </Route>
 
       <Route element={<DashboardLayout />}>

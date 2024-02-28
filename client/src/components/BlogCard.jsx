@@ -7,7 +7,7 @@ import Skeleton from "./Skeleton";
 const BlogCard = ({ data }) => {
   return (
     <article className="bg-white rounded-lg hover:shadow-md border">
-      <Link to={`/`}>
+      <Link to={`/blog/${data?._id}`}>
         <div className="aspect-video">
           <img
             src={data?.thumbnail}
@@ -25,9 +25,12 @@ const BlogCard = ({ data }) => {
           <BlogBadge category={data?.category} />
         </div>
 
-        <h1 className="text-lg line-clamp-2 font-semibold hover:underline cursor-default">
+        <Link
+          to={`/blog/${data?._id}`}
+          className="text-lg line-clamp-2 font-semibold hover:underline cursor-default"
+        >
           {data?.title}
-        </h1>
+        </Link>
 
         <p className="line-clamp-3 text-gray-600 text-sm">
           {data?.description}

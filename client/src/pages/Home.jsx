@@ -64,7 +64,7 @@ const Home = () => {
                 ))}
             </ul>
 
-            <div className="mt-8 mb-3">
+            <div className="mt-12 mb-3">
               <ReactPaginate
                 breakLabel="..."
                 nextLabel={<ChevronRight />}
