@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BlogBadge from "../components/BlogBadge";
 import { format } from "timeago.js";
@@ -14,16 +14,35 @@ import { useSelector } from "react-redux";
 import Commentbox from "../components/Commentbox";
 import Button from "../components/Button";
 import Comment from "../components/Comment";
+import useOnchange from "../hooks/useOnchange";
+import { toast } from "sonner";
 
 const BlogDetail = () => {
   const { id } = useParams();
   const { currentUser } = useSelector((state) => state.user);
   const { blog, isLoading } = useGetBlogDetail(id);
   const { blogs: relatedBlogs } = useGetBlogByCategory(blog?.category);
+  const { value, handleChange, setValue } = useOnchange();
+  const [isAdding, setIsAdding] = useState(false);
 
   // useEffect(() => {
   //   document.body.scrollIntoView({ behavior: "smooth", block: "start" });
   // }, []);
+
+  const addNewComment = async () => {
+    try {
+      setIsAdding(true);
+      //...
+
+      setIsAdding(false);
+      setValue("");
+    } catch (error) {
+      toast.error("Failed to add new comment");
+      console.log("Failed to add new comment ->", error);
+      setIsAdding(false);
+      setValue("");
+    }
+  };
 
   if (isLoading)
     return (
@@ -79,7 +98,12 @@ const BlogDetail = () => {
 
       {/* Comments */}
       <div>
-        <Commentbox />
+        <Commentbox
+          value={value}
+          onChange={handleChange}
+          onClick={addNewComment}
+          loading={isAdding}
+        />
 
         <h1 className="text-2xl font-semibold">Comments (89)</h1>
 

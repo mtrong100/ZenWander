@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const commentSchema = new mongoose.Schema(
   {
     content: { type: String, required: true },
-    author: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -19,5 +20,6 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
+commentSchema.plugin(mongoosePaginate);
 const Comment = mongoose.model("Comment", commentSchema);
 export default Comment;
