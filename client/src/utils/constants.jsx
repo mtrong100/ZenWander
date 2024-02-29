@@ -26,6 +26,11 @@ export const blogParams = {
   SORT: "title",
   ORDER: "desc",
 };
+export const commentParams = {
+  PAGE: 1,
+  LIMIT: 10,
+  ORDER: "desc",
+};
 
 export const sidebarLinks = [
   {

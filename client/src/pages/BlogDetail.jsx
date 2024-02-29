@@ -13,9 +13,15 @@ import TitleSection from "../components/TitleSection";
 import { useSelector } from "react-redux";
 import Commentbox from "../components/Commentbox";
 import Button from "../components/Button";
-import Comment from "../components/Comment";
+import Comment, { CommentSkeleton } from "../components/Comment";
 import useOnchange from "../hooks/useOnchange";
 import { toast } from "sonner";
+import {
+  createCommentApi,
+  deleteCommentApi,
+  getAllComments,
+  updateCommentApi,
+} from "../api/commentApi";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -23,25 +29,85 @@ const BlogDetail = () => {
   const { blog, isLoading } = useGetBlogDetail(id);
   const { blogs: relatedBlogs } = useGetBlogByCategory(blog?.category);
   const { value, handleChange, setValue } = useOnchange();
+
+  const [comments, setComments] = useState([]);
+  const [totalCmts, setTotalCmts] = useState(null);
+  const [loadingComments, setLoadingComments] = useState(false);
+  const [cmtId, setCmtId] = useState("");
   const [isAdding, setIsAdding] = useState(false);
 
   // useEffect(() => {
   //   document.body.scrollIntoView({ behavior: "smooth", block: "start" });
   // }, []);
 
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  async function fetchComments() {
+    try {
+      setLoadingComments(true);
+      const data = await getAllComments();
+      setTotalCmts(data?.totalDocs);
+      setComments(data?.docs);
+      setLoadingComments(false);
+    } catch (error) {
+      toast.error("Failed to fetch comments");
+      console.log("Failed to fetch comments ->", error);
+      setComments([]);
+      setLoadingComments(false);
+      setTotalCmts(null);
+    }
+  }
+
   const addNewComment = async () => {
     try {
       setIsAdding(true);
-      //...
+      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
 
-      setIsAdding(false);
+      const request = {
+        content: value.trim(),
+        user: currentUser?._id,
+        blog: id,
+      };
+
+      let res;
+      if (cmtId) {
+        res = await updateCommentApi(token, cmtId, request);
+      } else {
+        res = await createCommentApi(token, request);
+      }
+
+      toast.success(res?.message);
+      fetchComments();
+
+      setCmtId("");
       setValue("");
+      setIsAdding(false);
     } catch (error) {
       toast.error("Failed to add new comment");
       console.log("Failed to add new comment ->", error);
       setIsAdding(false);
       setValue("");
+      setCmtId("");
     }
+  };
+
+  const deleteComment = async (cmtId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
+      const res = await deleteCommentApi(cmtId, token);
+      toast.success(res?.message);
+      fetchComments();
+    } catch (error) {
+      toast.error(`Failed to delete comment with ID: ${cmtId}`);
+      console.log(`Failed to delete comment with ID: ${cmtId} ->`, error);
+    }
+  };
+
+  const updateComment = (data) => {
+    setCmtId(data?._id);
+    setValue(data?.content);
   };
 
   if (isLoading)
@@ -97,7 +163,7 @@ const BlogDetail = () => {
       </div>
 
       {/* Comments */}
-      <div>
+      <div className="mt-10">
         <Commentbox
           value={value}
           onChange={handleChange}
@@ -105,17 +171,28 @@ const BlogDetail = () => {
           loading={isAdding}
         />
 
-        <h1 className="text-2xl font-semibold">Comments (89)</h1>
+        <h1 className="text-2xl font-semibold">Comments ({totalCmts})</h1>
 
         <div className="my-5 space-y-5 w-full max-w-5xl mx-auto">
-          {Array(10)
-            .fill(0)
-            .map((item, index) => (
-              <Comment key={index} />
+          {loadingComments &&
+            Array(10)
+              .fill(0)
+              .map((item, index) => <CommentSkeleton key={index} />)}
+
+          {!loadingComments &&
+            comments?.map((item) => (
+              <Comment
+                onUpdate={updateComment}
+                onDelete={deleteComment}
+                key={item?._id}
+                data={item}
+              />
             ))}
         </div>
 
-        <Button className="mx-auto px-10">Load more</Button>
+        {comments?.length > 10 && (
+          <Button className="mx-auto px-10">Load more</Button>
+        )}
       </div>
 
       {/* Related blogs */}

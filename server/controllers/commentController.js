@@ -7,7 +7,6 @@ export const getAllComments = async (req, res, next) => {
   const {
     page = queryParams.PAGE,
     limit = queryParams.LIMIT,
-    sort = queryParams.SORT,
     order = queryParams.ORDER,
   } = req.query;
 
@@ -15,9 +14,7 @@ export const getAllComments = async (req, res, next) => {
     const options = {
       page,
       limit,
-      sort: {
-        [sort]: order === "asc" ? 1 : -1,
-      },
+      sort: { createdAt: order === "asc" ? 1 : -1 },
       populate: {
         path: "user",
         select: "name email _id avatar provider verified",
