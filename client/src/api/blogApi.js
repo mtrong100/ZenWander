@@ -64,10 +64,8 @@ export const getBlogsFromUserApi = async (
   }
 };
 
-export const getBlogDetailApi = async (id, accessToken) => {
-  const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/${id}`, {
-    headers: { token: `Bearer ${accessToken}` },
-  });
+export const getBlogDetailApi = async (id) => {
+  const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/${id}`);
   return res.data;
 };
 

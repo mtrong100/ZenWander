@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "./Button";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";

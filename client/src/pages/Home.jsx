@@ -20,6 +20,10 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
+
+  useEffect(() => {
     fetchBlogs();
   }, [nextPage]);
 

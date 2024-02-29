@@ -13,8 +13,7 @@ export default function useGetBlogDetail(blogId) {
   async function fetchBlog() {
     try {
       setIsLoading(true);
-      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
-      const res = await getBlogDetailApi(blogId, token);
+      const res = await getBlogDetailApi(blogId);
       setBlog(res);
       setIsLoading(false);
     } catch (error) {

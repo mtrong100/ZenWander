@@ -1,6 +1,7 @@
 import React from "react";
 import { blogCategories } from "../utils/constants";
 import { displayCategoryBadge } from "../utils/helper";
+import { Link } from "react-router-dom";
 
 const CategoryTab = () => {
   return (
@@ -8,7 +9,8 @@ const CategoryTab = () => {
       <h1 className="font-semibold text-2xl mb-5">Popular Categories</h1>
       <ul className="flex items-center gap-4 flex-wrap">
         {blogCategories.map((item) => (
-          <li
+          <Link
+            to={`/category/${item.value}`}
             key={item.title}
             className={`${displayCategoryBadge(
               item.title
@@ -16,7 +18,7 @@ const CategoryTab = () => {
           >
             {item.icon}
             {item.title}
-          </li>
+          </Link>
         ))}
       </ul>
     </div>
