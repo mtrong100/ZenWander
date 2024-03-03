@@ -24,5 +24,5 @@ export default function useGetBlogDetail(blogId) {
     }
   }
 
-  return { blog, isLoading };
+  return { blog, setBlog, isLoading };
 }

@@ -1,21 +1,33 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BlogBadge from "./BlogBadge";
 import { format } from "timeago.js";
 import Skeleton from "./Skeleton";
+import { toast } from "sonner";
+import { viewBlogApi } from "../api/blogApi";
 
 const BlogCard = ({ data }) => {
+  const navigate = useNavigate();
+
+  const handleViewBlog = async () => {
+    try {
+      await viewBlogApi(data?._id);
+      navigate(`/blog/${data?._id}`);
+    } catch (error) {
+      toast.error("Failed to update view count");
+      console.log("Failed to update view count ->", error);
+    }
+  };
+
   return (
     <article className="bg-white rounded-lg hover:shadow-md border">
-      <Link to={`/blog/${data?._id}`}>
-        <div className="aspect-video">
-          <img
-            src={data?.thumbnail}
-            alt={data?.title}
-            className="object-cover w-full h-full rounded"
-          />
-        </div>
-      </Link>
+      <div onClick={handleViewBlog} className="aspect-video">
+        <img
+          src={data?.thumbnail}
+          alt={data?.title}
+          className="object-cover w-full h-full rounded"
+        />
+      </div>
 
       <div className="space-y-2 mt-1 py-2 px-3">
         <div className="flex gap-2 items-center justify-between">
@@ -25,12 +37,12 @@ const BlogCard = ({ data }) => {
           <BlogBadge category={data?.category} />
         </div>
 
-        <Link
-          to={`/blog/${data?._id}`}
+        <h1
+          onClick={handleViewBlog}
           className="text-lg line-clamp-2 font-semibold hover:underline cursor-default"
         >
           {data?.title}
-        </Link>
+        </h1>
 
         <p className="line-clamp-3 text-gray-600 text-sm">
           {data?.description}

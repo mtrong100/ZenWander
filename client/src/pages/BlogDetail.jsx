@@ -19,15 +19,20 @@ import { toast } from "sonner";
 import {
   createCommentApi,
   deleteCommentApi,
-  getAllComments,
   updateCommentApi,
 } from "../api/commentApi";
 import { commentParams } from "../utils/constants";
+import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import {
+  getBlogDetailApi,
+  getCommentsFromBlogApi,
+  likeBlogApi,
+} from "../api/blogApi";
 
 const BlogDetail = () => {
   const { id } = useParams();
   const { currentUser } = useSelector((state) => state.user);
-  const { blog, isLoading } = useGetBlogDetail(id);
+  const { blog, setBlog, isLoading } = useGetBlogDetail(id);
   const { blogs: relatedBlogs } = useGetBlogByCategory(blog?.category);
   const { value, handleChange, setValue } = useOnchange();
 
@@ -38,9 +43,9 @@ const BlogDetail = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [limit, setLimit] = useState(commentParams.LIMIT);
 
-  // useEffect(() => {
-  //   document.body.scrollIntoView({ behavior: "smooth", block: "start" });
-  // }, []);
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   useEffect(() => {
     fetchComments();
@@ -49,13 +54,11 @@ const BlogDetail = () => {
   async function fetchComments() {
     try {
       setLoadingComments(true);
-      const data = await getAllComments({ limit: limit });
+      const data = await getCommentsFromBlogApi(id, { limit: limit });
       setTotalCmts(data?.totalDocs);
       setComments(data?.docs);
       setLoadingComments(false);
     } catch (error) {
-      toast.error("Failed to fetch comments");
-      console.log("Failed to fetch comments ->", error);
       setComments([]);
       setLoadingComments(false);
       setTotalCmts(null);
@@ -116,6 +119,18 @@ const BlogDetail = () => {
     setValue(data?.content);
   };
 
+  const handleLikeBlog = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
+      await likeBlogApi(token, id, currentUser?._id);
+      const res = await getBlogDetailApi(id);
+      setBlog(res);
+    } catch (error) {
+      toast.error(`Failed to like blog`);
+      console.log(`Failed to like blog ->`, error);
+    }
+  };
+
   if (isLoading)
     return (
       <div className="w-full h-full my-28 flex items-center justify-center">
@@ -138,8 +153,29 @@ const BlogDetail = () => {
               <span className="text-sm text-gray-600">
                 {format(blog?.createdAt)}
               </span>
-              <div className="text-primary flex items-center font-semibold gap-2">
-                60 <Eye size={20} />
+
+              <div className="flex items-center gap-5">
+                <div className="text-primary text-lg flex items-center font-semibold gap-1">
+                  {blog?.views || 0} <Eye size={20} />
+                </div>
+
+                <div className="text-primary text-lg flex items-center font-semibold gap-1">
+                  {blog?.likes?.length || 0}
+
+                  {blog?.likes?.includes(currentUser?._id) ? (
+                    <IoHeartSharp
+                      onClick={handleLikeBlog}
+                      className="cursor-pointer"
+                      size={20}
+                    />
+                  ) : (
+                    <IoHeartOutline
+                      onClick={handleLikeBlog}
+                      className="cursor-pointer"
+                      size={20}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -156,8 +192,8 @@ const BlogDetail = () => {
 
         <div className="h-[400px]">
           <img
-            src="https://source.unsplash.com/random"
-            alt=""
+            src={blog?.thumbnail}
+            alt={blog?.title}
             className="object-cover w-full h-full rounded-lg"
           />
         </div>
@@ -177,7 +213,7 @@ const BlogDetail = () => {
           loading={isAdding}
         />
 
-        <h1 className="text-2xl font-semibold">Comments ({totalCmts})</h1>
+        <h1 className="text-2xl font-semibold">Comments ({totalCmts || 0})</h1>
 
         <div className="my-5 space-y-5 w-full max-w-5xl mx-auto">
           {loadingComments &&

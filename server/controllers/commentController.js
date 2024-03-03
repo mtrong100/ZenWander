@@ -2,7 +2,6 @@ import Comment from "../models/commentModel.js";
 import { queryParams } from "../utils/constants.js";
 import { errorHandler } from "../utils/errorHandler.js";
 
-/* GET BLOGS */
 export const getAllComments = async (req, res, next) => {
   const {
     page = queryParams.PAGE,

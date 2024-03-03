@@ -16,8 +16,8 @@ const blogSchema = new mongoose.Schema(
       required: true,
     },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-    views: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
+    views: { type: Number, default: 0 },
+    likes: { type: Array },
   },
   {
     timestamps: true,

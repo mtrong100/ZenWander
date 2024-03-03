@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "./Button";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { getAllBlogsApi } from "../api/blogApi";
+import { getAllBlogsApi, viewBlogApi } from "../api/blogApi";
 import { toast } from "sonner";
 import { format } from "timeago.js";
 
@@ -89,23 +89,36 @@ const Banner = () => {
 export default Banner;
 
 function BlogItem({ item }) {
+  const navigate = useNavigate();
+
+  const handleViewBlog = async () => {
+    try {
+      await viewBlogApi(item?._id);
+      navigate(`/blog/${item?._id}`);
+    } catch (error) {
+      toast.error("Failed to update view count");
+      console.log("Failed to update view count ->", error);
+    }
+  };
+
   return (
     <div className="w-full my-6">
       <div className="relative w-full h-[500px] 2xl:h-[600px] flex  ">
-        <Link to={`/blog/${item?._id}`} className="w-full ">
+        <div onClick={handleViewBlog} className="w-full ">
           <img
             src={item?.thumbnail}
             alt={item?.title}
             className="w-full md:w-3/4 h-64 md:h-[420px] 2xl:h-[560px] rounded object-cover"
           />
-        </Link>
+        </div>
 
         <div className="absolute flex flex-col md:right-10 bottom-10 md:bottom-2 w-full md:w-2/4 lg:w-1/3 2xl:w-[480px]  shadow-2xl p-5 bg-white rounded-lg gap-3">
-          <Link to={`/blog/${item?._id}`}>
-            <h1 className="font-semibold text-2xl line-clamp-2">
-              {item?.title}
-            </h1>
-          </Link>
+          <h1
+            onClick={handleViewBlog}
+            className="font-semibold text-2xl line-clamp-2 hover:underline"
+          >
+            {item?.title}
+          </h1>
 
           <div className="flex-1 overflow-hidden line-clamp-4 text-gray-700 text-sm text-justify">
             {item?.description}

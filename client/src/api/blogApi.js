@@ -1,5 +1,5 @@
 import axios from "axios";
-import { blogParams } from "../utils/constants";
+import { blogParams, commentParams } from "../utils/constants";
 
 export const getAllBlogsApi = async ({
   page = blogParams.PAGE,
@@ -100,5 +100,46 @@ export const deleteBlogApi = async (id, accessToken) => {
       headers: { token: `Bearer ${accessToken}` },
     }
   );
+  return res.data;
+};
+
+export const viewBlogApi = async (id) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/blog/view/${id}`
+  );
+
+  return res.data;
+};
+
+export const likeBlogApi = async (accessToken, blogId, userId) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/blog/like/${blogId}/${userId}`,
+    {},
+    {
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res.data;
+};
+
+export const getCommentsFromBlogApi = async (
+  blogId,
+  {
+    page = commentParams.PAGE,
+    limit = commentParams.LIMIT,
+    order = commentParams.ORDER,
+  } = {}
+) => {
+  const res = await axios.get(
+    `${import.meta.env.VITE_BASE_URL}/blog/comments/${blogId}`,
+    {
+      params: {
+        page,
+        limit,
+        order,
+      },
+    }
+  );
+
   return res.data;
 };

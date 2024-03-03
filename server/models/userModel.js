@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
     verificationToken: { type: String },
     resetPasswordOtp: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
-    favorites: [{ type: Schema.Types.ObjectId, ref: "Blog" }],
+    favorites: { type: Array },
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     following: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
