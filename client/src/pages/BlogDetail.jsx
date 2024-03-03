@@ -22,6 +22,7 @@ import {
   getAllComments,
   updateCommentApi,
 } from "../api/commentApi";
+import { commentParams } from "../utils/constants";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -35,6 +36,7 @@ const BlogDetail = () => {
   const [loadingComments, setLoadingComments] = useState(false);
   const [cmtId, setCmtId] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [limit, setLimit] = useState(commentParams.LIMIT);
 
   // useEffect(() => {
   //   document.body.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -42,12 +44,12 @@ const BlogDetail = () => {
 
   useEffect(() => {
     fetchComments();
-  }, []);
+  }, [limit]);
 
   async function fetchComments() {
     try {
       setLoadingComments(true);
-      const data = await getAllComments();
+      const data = await getAllComments({ limit: limit });
       setTotalCmts(data?.totalDocs);
       setComments(data?.docs);
       setLoadingComments(false);
@@ -59,6 +61,10 @@ const BlogDetail = () => {
       setTotalCmts(null);
     }
   }
+
+  const loadMoreComments = () => {
+    setLimit((prev) => prev + 10);
+  };
 
   const addNewComment = async () => {
     try {
@@ -190,8 +196,10 @@ const BlogDetail = () => {
             ))}
         </div>
 
-        {comments?.length > 10 && (
-          <Button className="mx-auto px-10">Load more</Button>
+        {comments?.length >= 10 && (
+          <Button onClick={loadMoreComments} className="mx-auto px-10">
+            Load more
+          </Button>
         )}
       </div>
 
