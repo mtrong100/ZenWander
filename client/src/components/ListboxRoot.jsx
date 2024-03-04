@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
 import { twMerge } from "tailwind-merge";
@@ -10,8 +10,6 @@ const ListboxRoot = ({
   list = [],
   placeholder = "",
 }) => {
-  const [open, setOpen] = useState(false);
-
   return (
     <div className={twMerge("w-[250px]", className)}>
       <Listbox value={selected} onChange={setSelected}>
