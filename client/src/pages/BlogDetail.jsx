@@ -10,7 +10,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import BlogCard from "../components/BlogCard";
 import TitleSection from "../components/TitleSection";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Commentbox from "../components/Commentbox";
 import Button from "../components/Button";
 import Comment, { CommentSkeleton } from "../components/Comment";
@@ -28,9 +28,13 @@ import {
   getCommentsFromBlogApi,
   likeBlogApi,
 } from "../api/blogApi";
+import { followUserApi, getUserDetailApi } from "../api/userApi";
+import { storeCurrentUser } from "../redux/slices/userSlice";
 
 const BlogDetail = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+
   const { currentUser } = useSelector((state) => state.user);
   const { blog, setBlog, isLoading } = useGetBlogDetail(id);
   const { blogs: relatedBlogs } = useGetBlogByCategory(blog?.category);
@@ -131,6 +135,18 @@ const BlogDetail = () => {
     }
   };
 
+  const followUser = async (authorId) => {
+    try {
+      const token = JSON.parse(localStorage.getItem("ZENWANDER_TOKEN") || "");
+      await followUserApi(token, authorId);
+      const data = await getUserDetailApi(currentUser?._id, token);
+      dispatch(storeCurrentUser(data));
+    } catch (error) {
+      toast.error("Failed to follow/unfollow a user");
+      console.log(`Failed to follow/unfollow a user ->`, error);
+    }
+  };
+
   if (isLoading)
     return (
       <div className="w-full h-full my-28 flex items-center justify-center">
@@ -139,6 +155,8 @@ const BlogDetail = () => {
         </span>
       </div>
     );
+
+  const isFollowed = currentUser?.following?.includes(blog?.author?._id);
 
   return (
     <section className="my-10">
@@ -187,6 +205,15 @@ const BlogDetail = () => {
               className="w-[40px] h-[40px] rounded-full object-cover"
             />
             <h1 className="font-semibold text-lg">{blog?.author?.name}</h1>
+
+            {currentUser && currentUser?._id !== blog?.author?._id && (
+              <button
+                onClick={() => followUser(blog?.author?._id)}
+                className="py-2 text-sm w-[100px] hover:bg-blue-50 font-medium border border-primary text-primary rounded-lg"
+              >
+                {isFollowed ? "Following" : "Follow"}
+              </button>
+            )}
           </div>
         </div>
 

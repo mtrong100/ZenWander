@@ -10,24 +10,19 @@ export const getAllBlogsApi = async ({
   query,
   status,
 } = {}) => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/all`, {
-      params: {
-        category,
-        query,
-        page,
-        limit,
-        sort,
-        order,
-        status,
-      },
-    });
+  const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/blog/all`, {
+    params: {
+      category,
+      query,
+      page,
+      limit,
+      sort,
+      order,
+      status,
+    },
+  });
 
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
+  return res.data;
 };
 
 export const getBlogsFromUserApi = async (
@@ -42,26 +37,21 @@ export const getBlogsFromUserApi = async (
     query,
   } = {}
 ) => {
-  try {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BASE_URL}/blog/user/${authorId}`,
-      {
-        params: {
-          category,
-          query,
-          page,
-          limit,
-          sort,
-          order,
-        },
-        headers: { token: `Bearer ${accessToken}` },
-      }
-    );
-    return res.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
+  const res = await axios.get(
+    `${import.meta.env.VITE_BASE_URL}/blog/user/${authorId}`,
+    {
+      params: {
+        category,
+        query,
+        page,
+        limit,
+        sort,
+        order,
+      },
+      headers: { token: `Bearer ${accessToken}` },
+    }
+  );
+  return res.data;
 };
 
 export const getBlogDetailApi = async (id) => {
