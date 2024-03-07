@@ -1,8 +1,11 @@
 import React from "react";
 import { format } from "timeago.js";
 import Skeleton from "./Skeleton";
+import { useSelector } from "react-redux";
 
 const Comment = ({ data, onUpdate, onDelete }) => {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <div className="flex items-start mb-4">
       <img
@@ -20,20 +23,22 @@ const Comment = ({ data, onUpdate, onDelete }) => {
           </span>
         </div>
 
-        <div className="text-sm font-medium flex pl-1 mt-1 items-center gap-3">
-          <button
-            onClick={() => onUpdate(data)}
-            className="text-green-500 hover:text-green-600"
-          >
-            Update
-          </button>
-          <button
-            onClick={() => onDelete(data?._id)}
-            className="text-red-500 hover:text-red-600"
-          >
-            Delete
-          </button>
-        </div>
+        {currentUser?._id === data?.user?._id && (
+          <div className="text-sm font-medium flex pl-1 mt-1 items-center gap-3">
+            <button
+              onClick={() => onUpdate(data)}
+              className="text-green-500 hover:text-green-600"
+            >
+              Update
+            </button>
+            <button
+              onClick={() => onDelete(data?._id)}
+              className="text-red-500 hover:text-red-600"
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

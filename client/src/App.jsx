@@ -10,7 +10,6 @@ import About from "./pages/About";
 import Category from "./pages/Category";
 import Dashboard from "./pages/manage/Dashboard";
 import ManageBlog from "./pages/manage/ManageBlog";
-import ManageFollower from "./pages/manage/ManageFollower";
 import CreateBlog from "./pages/manage/CreateBlog";
 import Profile from "./pages/Profile";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -42,7 +41,6 @@ function App() {
       <Route element={<DashboardLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/manage-blogs" element={<ManageBlog />} />
-        <Route path="/manage-followers" element={<ManageFollower />} />
         <Route path="/create-blog" element={<CreateBlog />} />
         <Route path="/update-blog/:id" element={<UpdateBlog />} />
       </Route>

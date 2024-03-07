@@ -6,8 +6,6 @@ import {
   ShoppingBag,
   Store,
 } from "lucide-react";
-import Input from "../components/Input";
-import Textarea from "../components/Textarea";
 import Separator from "../components/Separator";
 import Button from "../components/Button";
 import TitleSection from "../components/TitleSection";
@@ -113,14 +111,26 @@ const About = () => {
 
           <section>
             <div className="grid gap-5">
-              <Input type="email" placeholder="Email" className="h-[50px]" />
-              <Input type="text" placeholder="Name" className="h-[50px]" />
-              <Input type="text" placeholder="Phone" className="h-[50px]" />
+              <input
+                type="text"
+                placeholder="Enter your email"
+                className="input-style"
+              />
+              <input
+                type="text"
+                placeholder="Enter your name"
+                className="input-style"
+              />
+              <input
+                type="text"
+                placeholder="Enter your phone"
+                className="input-style"
+              />
             </div>
             <div className="mt-[32px]">
-              <Textarea
+              <textarea
                 placeholder="Type your message here."
-                className="min-h-[207px]"
+                className="min-h-[207px] input-style"
               />
             </div>
             <Button className="mt-5 ml-auto">Send Massage</Button>

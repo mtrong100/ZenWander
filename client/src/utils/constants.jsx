@@ -48,12 +48,11 @@ export const sidebarLinks = [
     icon: <List size={20} />,
     path: "/manage-blogs",
   },
-
-  {
-    title: "Followers",
-    icon: <UsersRound size={20} />,
-    path: "/manage-followers",
-  },
+  // {
+  //   title: "Followers",
+  //   icon: <UsersRound size={20} />,
+  //   path: "/manage-followers",
+  // },
 ];
 
 export const orderOptions = [

@@ -62,7 +62,8 @@ const BlogTable = forwardRef((_, ref) => {
               <td className="border p-4">
                 <div className="flex items-center justify-end gap-5">
                   <Eye
-                    size={22}
+                    onClkik
+                    onClick={() => navigate(`/blog/${item?._id}`)}
                     className="cursor-pointer hover:opacity-80 text-gray-500 hover:text-primary"
                   />
                   <Pencil

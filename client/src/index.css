@@ -12,6 +12,9 @@
   .page-container {
     @apply w-full max-w-[1170px] px-5 mx-auto;
   }
+  .input-style {
+    @apply w-full p-3  border-gray-300 transition-all caret-primary border focus:border-primary outline-none rounded-lg shadow-sm;
+  }
 }
 
 @layer utilities {
