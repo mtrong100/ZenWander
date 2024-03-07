@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export const getPopularWrittersApi = async () => {
-  const res = await axios.post(
-    `${import.meta.env.VITE_ENDPOINT}/user/bloggers/`
+  const res = await axios.get(
+    `${import.meta.env.VITE_BASE_URL}/user/bloggers/`
   );
 
   return res.data;
